@@ -8,6 +8,8 @@ const encrypt= require("mongoose-encryption");
 
 const app=express();
 
+console.log(process.env.API_KEY)
+
 app.use(express.static("public"));
 app.set('view engine','ejs');
 app.use(bodyParser.urlencoded({
@@ -21,6 +23,7 @@ mongoose.connect(
             console.log("connect mongodb successfully");
         }else{
             console.log(err);
+            
         }
     }
   );
@@ -30,8 +33,8 @@ mongoose.connect(
     password:String
   });
 
-  const secret="thisisaboutlittlesecret.";
-  userSchema.plugin(encrypt,{secret:secret, encryptedFields:['password']});
+
+  userSchema.plugin(encrypt,{secret:process.env.SECRET, encryptedFields:['password']});
 
   const User=new mongoose.model("User",userSchema);
 
